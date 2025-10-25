@@ -15,7 +15,7 @@ public class FormulaListPanel extends JPanel {
         // ========== ALL FORMULAS ==========
 
         formulas.put("Mechanics", new String[]{
-            "Velocity", "Acceleration", "Final Velocity", "Initial Velocity", "Time",
+            "Velocity", "Acceleration", "Time",
             "Force", "Mass", "Work", "Power", "Momentum", "Impulse", "Kinetic Energy",
             "Potential Energy", "Mechanical Energy", "Centripetal Force",
             "Centripetal Acceleration", "Torque", "Angular Momentum",
