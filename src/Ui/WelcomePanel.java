@@ -31,7 +31,7 @@ public class WelcomePanel extends JPanel {
         JButton startButton = new JButton("Let's Start");
         startButton.setFont(new Font("Segoe UI", Font.BOLD, 28));
         startButton.setForeground(Color.WHITE);
-        startButton.setBackground(Color.RED);
+        startButton.setBackground(Color.BLUE);
         startButton.setFocusPainted(false);
         startButton.setBounds(350, 450, 200, 70);
         startButton.addActionListener(e -> mainWindow.showPanel("CategoryPanel"));
