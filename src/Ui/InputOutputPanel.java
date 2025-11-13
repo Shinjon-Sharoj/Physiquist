@@ -1,10 +1,10 @@
 package Ui;
 
 import java.awt.*;
-import java.util.*;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import javax.swing.*;
 
 public class InputOutputPanel extends JPanel {
 
@@ -405,6 +405,46 @@ public class InputOutputPanel extends JPanel {
                 if (targetVariable.equals("M")) return (values.get("g") * Math.pow(values.get("r"), 2)) / G;
                 return Math.sqrt((G * values.get("M")) / values.get("g")); // r
 
+            case "Gravitational Potential Energy":
+               if (targetVariable.equals("U")) return - (G * values.get("M") * values.get("m")) / values.get("r");
+               if (targetVariable.equals("M")) return - (values.get("U") * values.get("r")) / (G * values.get("m"));
+               if (targetVariable.equals("m")) return - (values.get("U") * values.get("r")) / (G * values.get("M"));
+               return - (G * values.get("M") * values.get("m")) / values.get("U"); // r
+
+            case "Orbital Velocity":
+               if (targetVariable.equals("v")) return Math.sqrt((G * values.get("M")) / values.get("r"));
+               if (targetVariable.equals("M")) return (Math.pow(values.get("v"), 2) * values.get("r")) / G;
+               return (G * values.get("M")) / Math.pow(values.get("v"), 2); // r
+
+            case "Kepler's Laws":
+    // T² ∝ r³ বা T²/r³ = constant
+    // আমরা T² = k * r³ ধরে নিচ্ছি, যেখানে k = 4π²/GM
+               if (targetVariable.equals("T")) return Math.sqrt((4 * Math.PI * Math.PI * Math.pow(values.get("r"), 3)) / (G * values.get("M")));
+               if (targetVariable.equals("r")) return Math.cbrt((Math.pow(values.get("T"), 2) * G * values.get("M")) / (4 * Math.PI * Math.PI));
+               return (4 * Math.PI * Math.PI * Math.pow(values.get("r"), 3)) / (G * Math.pow(values.get("T"), 2)); // M
+
+            case "Distance-Time Relation":
+               if (targetVariable.equals("s")) return values.get("u") * values.get("t") + 0.5 * values.get("a") * Math.pow(values.get("t"), 2);
+               if (targetVariable.equals("u")) return (values.get("s") - 0.5 * values.get("a") * Math.pow(values.get("t"), 2)) / values.get("t");
+               if (targetVariable.equals("a")) return (2 * (values.get("s") - values.get("u") * values.get("t"))) / Math.pow(values.get("t"), 2);
+    // t এর জন্য quadratic equation সমাধান
+    double a_val = 0.5 * values.get("a");
+    double b_val = values.get("u");
+    double c_val = -values.get("s");
+    double discriminant = b_val * b_val - 4 * a_val * c_val;
+               return (-b_val + Math.sqrt(discriminant)) / (2 * a_val); // t
+
+            case "Velocity-Time Relation":
+              if (targetVariable.equals("v")) return values.get("u") + values.get("a") * values.get("t");
+              if (targetVariable.equals("u")) return values.get("v") - values.get("a") * values.get("t");
+              if (targetVariable.equals("a")) return (values.get("v") - values.get("u")) / values.get("t");
+              return (values.get("v") - values.get("u")) / values.get("a"); // t
+
+            case "Moment of Inertia":
+              if (targetVariable.equals("I")) return values.get("m") * Math.pow(values.get("r"), 2);
+              if (targetVariable.equals("m")) return values.get("I") / Math.pow(values.get("r"), 2);
+              return Math.sqrt(values.get("I") / values.get("m")); // r
+
             // ========== FLUID MECHANICS ==========
             case "Pressure":
                 if (targetVariable.equals("P")) return values.get("F") / values.get("A");
@@ -415,6 +455,114 @@ public class InputOutputPanel extends JPanel {
                 if (targetVariable.equals("ρ")) return values.get("m") / values.get("V");
                 if (targetVariable.equals("m")) return values.get("ρ") * values.get("V");
                 return values.get("m") / values.get("ρ"); // V
+           
+            case "Bernoulli's Principle":
+                // P + (1/2)ρv² + ρgh = constant
+                // আমরা constant বের করবো
+                if (targetVariable.equals("constant")) 
+                return values.get("P") + 0.5 * values.get("ρ") * Math.pow(values.get("v"), 2) + values.get("ρ") * values.get("g") * values.get("h");
+                if (targetVariable.equals("P")) 
+                return values.get("constant") - 0.5 * values.get("ρ") * Math.pow(values.get("v"), 2) - values.get("ρ") * values.get("g") * values.get("h");
+                if (targetVariable.equals("v")) 
+                return Math.sqrt(2 * (values.get("constant") - values.get("P") - values.get("ρ") * values.get("g") * values.get("h")) / values.get("ρ"));
+                if (targetVariable.equals("h")) 
+                return (values.get("constant") - values.get("P") - 0.5 * values.get("ρ") * Math.pow(values.get("v"), 2)) / (values.get("ρ") * values.get("g"));
+                return (values.get("constant") - values.get("P") - 0.5 * values.get("ρ") * Math.pow(values.get("v"), 2)) / (values.get("g") * values.get("h")); // ρ
+
+            case "Elasticity":
+                // Y = (F/A) / (ΔL/L)
+                if (targetVariable.equals("Y")) return (values.get("F") / values.get("A")) / (values.get("ΔL") / values.get("L"));
+                if (targetVariable.equals("F")) return values.get("Y") * values.get("A") * (values.get("ΔL") / values.get("L"));
+                if (targetVariable.equals("A")) return values.get("F") / (values.get("Y") * (values.get("ΔL") / values.get("L")));
+                if (targetVariable.equals("ΔL")) return (values.get("F") / values.get("A")) * values.get("L") / values.get("Y");
+                return values.get("ΔL") * values.get("Y") / (values.get("F") / values.get("A")); // L
+
+           case "Pressure in Gases":
+               // P = (1/3) * ρ * v²
+               if (targetVariable.equals("P")) return (1.0/3.0) * values.get("ρ") * Math.pow(values.get("v"), 2);
+               if (targetVariable.equals("ρ")) return (3 * values.get("P")) / Math.pow(values.get("v"), 2);
+               return Math.sqrt((3 * values.get("P")) / values.get("ρ")); // v
+
+            case "Fluid Pressure":
+                // P = ρ * g * h
+                if (targetVariable.equals("P")) return values.get("ρ") * values.get("g") * values.get("h");
+                if (targetVariable.equals("ρ")) return values.get("P") / (values.get("g") * values.get("h"));
+                if (targetVariable.equals("h")) return values.get("P") / (values.get("ρ") * values.get("g"));
+                return values.get("P") / (values.get("ρ") * values.get("h")); // g
+
+           case "Atmospheric Pressure":
+                // P = h * ρ * g
+                if (targetVariable.equals("P")) return values.get("h") * values.get("ρ") * values.get("g");
+                if (targetVariable.equals("h")) return values.get("P") / (values.get("ρ") * values.get("g"));
+                if (targetVariable.equals("ρ")) return values.get("P") / (values.get("h") * values.get("g"));
+                return values.get("P") / (values.get("h") * values.get("ρ")); // g
+
+           case "Pascal's Law":
+                // F1/A1 = F2/A2
+                if (targetVariable.equals("F2")) return values.get("F1") * values.get("A2") / values.get("A1");
+                if (targetVariable.equals("F1")) return values.get("F2") * values.get("A1") / values.get("A2");
+                if (targetVariable.equals("A2")) return values.get("F2") * values.get("A1") / values.get("F1");
+                return values.get("F1") * values.get("A2") / values.get("F2"); // A1
+
+           case "Pressure due to Depth":
+                // P = P0 + ρ * g * h
+                if (targetVariable.equals("P")) return values.get("P0") + values.get("ρ") * values.get("g") * values.get("h");
+                if (targetVariable.equals("P0")) return values.get("P") - values.get("ρ") * values.get("g") * values.get("h");
+                if (targetVariable.equals("ρ")) return (values.get("P") - values.get("P0")) / (values.get("g") * values.get("h"));
+                if (targetVariable.equals("h")) return (values.get("P") - values.get("P0")) / (values.get("ρ") * values.get("g"));
+                return (values.get("P") - values.get("P0")) / (values.get("ρ") * values.get("h")); // g
+
+            case "Boyle's Law":
+                // P1 * V1 = P2 * V2
+                if (targetVariable.equals("P2")) return values.get("P1") * values.get("V1") / values.get("V2");
+                if (targetVariable.equals("V2")) return values.get("P1") * values.get("V1") / values.get("P2");
+                if (targetVariable.equals("P1")) return values.get("P2") * values.get("V2") / values.get("V1");
+                return values.get("P1") * values.get("V1") / values.get("P2"); // V1
+
+            case "Charles's Law":
+                // V1 / T1 = V2 / T2
+                if (targetVariable.equals("V2")) return values.get("V1") * values.get("T2") / values.get("T1");
+                if (targetVariable.equals("T2")) return values.get("V2") * values.get("T1") / values.get("V1");
+                if (targetVariable.equals("V1")) return values.get("V2") * values.get("T1") / values.get("T2");
+                return values.get("V1") * values.get("T2") / values.get("V2"); // T1
+
+            case "Gay-Lussac's Law":
+                // P1 / T1 = P2 / T2
+                if (targetVariable.equals("P2")) return values.get("P1") * values.get("T2") / values.get("T1");
+                if (targetVariable.equals("T2")) return values.get("P2") * values.get("T1") / values.get("P1");
+                if (targetVariable.equals("P1")) return values.get("P2") * values.get("T1") / values.get("T2");
+                return values.get("P1") * values.get("T2") / values.get("P2"); // T1
+
+            case "Avogadro's Law":
+                // V1 / n1 = V2 / n2
+                if (targetVariable.equals("V2")) return values.get("V1") * values.get("n2") / values.get("n1");
+                if (targetVariable.equals("n2")) return values.get("V2") * values.get("n1") / values.get("V1");
+                if (targetVariable.equals("V1")) return values.get("V2") * values.get("n1") / values.get("n2");
+                return values.get("V1") * values.get("n2") / values.get("V2"); // n1
+
+             case "Combined Gas Law":
+                 // (P1 * V1) / T1 = (P2 * V2) / T2
+                 if (targetVariable.equals("P2")) return (values.get("P1") * values.get("V1") * values.get("T2")) / (values.get("T1") * values.get("V2"));
+                 if (targetVariable.equals("V2")) return (values.get("P1") * values.get("V1") * values.get("T2")) / (values.get("T1") * values.get("P2"));
+                 if (targetVariable.equals("T2")) return (values.get("P2") * values.get("V2") * values.get("T1")) / (values.get("P1") * values.get("V1"));
+                 if (targetVariable.equals("P1")) return (values.get("P2") * values.get("V2") * values.get("T1")) / (values.get("V1") * values.get("T2"));
+                 if (targetVariable.equals("V1")) return (values.get("P2") * values.get("V2") * values.get("T1")) / (values.get("P1") * values.get("T2"));
+                 return (values.get("P1") * values.get("V1") * values.get("T2")) / (values.get("P2") * values.get("V2")); // T1
+
+            case "Ideal Gas Law":
+                // P * V = n * R * T
+                double R = 8.314; // Ideal gas constant
+                if (targetVariable.equals("P")) return (values.get("n") * R * values.get("T")) / values.get("V");
+                if (targetVariable.equals("V")) return (values.get("n") * R * values.get("T")) / values.get("P");
+                if (targetVariable.equals("n")) return (values.get("P") * values.get("V")) / (R * values.get("T"));
+                return (values.get("P") * values.get("V")) / (values.get("n") * R); // T
+
+            case "Dalton's Law":
+                // P_total = P1 + P2 + P3
+                if (targetVariable.equals("P_total")) return values.get("P1") + values.get("P2") + values.get("P3");
+                if (targetVariable.equals("P1")) return values.get("P_total") - values.get("P2") - values.get("P3");
+                if (targetVariable.equals("P2")) return values.get("P_total") - values.get("P1") - values.get("P3");
+                return values.get("P_total") - values.get("P1") - values.get("P2"); // P3
 
             // ========== THERMODYNAMICS ==========
             case "Temperature Conversion":
@@ -949,8 +1097,28 @@ public class InputOutputPanel extends JPanel {
         formulaMap.put("Collision", "m₁u₁ + m₂u₂ = m₁v₁ + m₂v₂");
         formulaMap.put("Gravitational Force", "F = G × m₁ × m₂ / r²");
         formulaMap.put("Acceleration due to Gravity", "g = G × M / r²");
+        formulaMap.put("Gravitational Potential Energy", "U = - (G × M × m) / r");
+        formulaMap.put("Orbital Velocity", "v = √(G × M / r)");
+        formulaMap.put("Kepler's Laws", "T² = (4π²/GM) × r³");
+        formulaMap.put("Distance-Time Relation", "s = u × t + ½ × a × t²");
+        formulaMap.put("Velocity-Time Relation", "v = u + a × t");
+        formulaMap.put("Moment of Inertia", "I = m × r²");
         formulaMap.put("Pressure", "P = F / A");
         formulaMap.put("Density", "ρ = m / V");
+        formulaMap.put("Bernoulli's Principle", "P + ½ρv² + ρgh = constant");
+        formulaMap.put("Elasticity", "Y = (F/A) / (ΔL/L)");
+        formulaMap.put("Pressure in Gases", "P = (1/3) × ρ × v²");
+        formulaMap.put("Fluid Pressure", "P = ρ × g × h");
+        formulaMap.put("Atmospheric Pressure", "P = h × ρ × g");
+        formulaMap.put("Pascal's Law", "F₁/A₁ = F₂/A₂");
+        formulaMap.put("Pressure due to Depth", "P = P₀ + ρ × g × h");
+        formulaMap.put("Boyle's Law", "P₁ × V₁ = P₂ × V₂");
+        formulaMap.put("Charles's Law", "V₁/T₁ = V₂/T₂");
+        formulaMap.put("Gay-Lussac's Law", "P₁/T₁ = P₂/T₂");
+        formulaMap.put("Avogadro's Law", "V₁/n₁ = V₂/n₂");
+        formulaMap.put("Combined Gas Law", "(P₁ × V₁)/T₁ = (P₂ × V₂)/T₂");
+        formulaMap.put("Ideal Gas Law", "P × V = n × R × T");
+        formulaMap.put("Dalton's Law", "P_total = P₁ + P₂ + P₃");
         formulaMap.put("Temperature Conversion", "K = °C + 273.15 | °F = °C × 9/5 + 32");
         formulaMap.put("Wave Speed", "v = f × λ");
         formulaMap.put("Lens Formula", "1/f = 1/v - 1/u");
@@ -1000,16 +1168,54 @@ public class InputOutputPanel extends JPanel {
         // Gravitation
         variables.put("Gravitational Force", new String[]{"F", "m1", "m2", "r"});
         variables.put("Acceleration due to Gravity", new String[]{"g", "M", "r"});
+        variables.put("Gravitational Potential Energy", new String[]{"U", "M", "m", "r"});
+        variables.put("Orbital Velocity", new String[]{"v", "M", "r"});
+        variables.put("Kepler's Laws", new String[]{"T", "r"});
+        variables.put("Distance-Time Relation", new String[]{"s", "u", "t", "a"});
+        variables.put("Velocity-Time Relation", new String[]{"v", "u", "a", "t"});
+        variables.put("Moment of Inertia", new String[]{"I", "m", "r"});
         
         // Fluid Mechanics
         variables.put("Pressure", new String[]{"P", "F", "A"});
         variables.put("Density", new String[]{"ρ", "m", "V"});
+        variables.put("Bernoulli's Principle", new String[]{"constant", "P", "ρ", "v", "h", "g"});
+        variables.put("Elasticity", new String[]{"Y", "F", "A", "ΔL", "L"});
+        variables.put("Pressure in Gases", new String[]{"P", "ρ", "v"});
+        variables.put("Fluid Pressure", new String[]{"P", "ρ", "g", "h"});
+        variables.put("Atmospheric Pressure", new String[]{"P", "h", "ρ", "g"});
+        variables.put("Pascal's Law", new String[]{"F2", "F1", "A1", "A2"});
+        variables.put("Pressure due to Depth", new String[]{"P", "P0", "ρ", "g", "h"});
+        variables.put("Boyle's Law", new String[]{"P2", "P1", "V1", "V2"});
+        variables.put("Charles's Law", new String[]{"V2", "V1", "T1", "T2"});
+        variables.put("Gay-Lussac's Law", new String[]{"P2", "P1", "T1", "T2"});
+        variables.put("Avogadro's Law", new String[]{"V2", "V1", "n1", "n2"});
+        variables.put("Combined Gas Law", new String[]{"P2", "P1", "V1", "T1", "V2", "T2"});
+        variables.put("Ideal Gas Law", new String[]{"P", "n", "R", "T", "V"});
+        variables.put("Dalton's Law", new String[]{"P_total", "P1", "P2", "P3"});
         
         // Thermodynamics
         variables.put("Temperature Conversion", new String[]{"K", "°C", "°F"});
+        variables.put("Fahrenheit to Celsius", new String[]{"°C", "°F"});
+        variables.put("Celsius to Kelvin", new String[]{"K", "°C"});
+        variables.put("Kelvin to Celsius", new String[]{"°C", "K"});
+        variables.put("First Law of Thermodynamics", new String[]{"ΔQ", "ΔU", "W"});
+        variables.put("First Law Work", new String[]{"W", "ΔQ", "ΔU"});
+        variables.put("First Law Internal Energy", new String[]{"ΔU", "ΔQ", "W"});
+        variables.put("Heat Engine Efficiency", new String[]{"η", "W", "Qh"});
+        variables.put("Heat Engine Efficiency Alt", new String[]{"η", "Qc", "Qh"});
+        variables.put("Carnot Efficiency", new String[]{"η", "Tc", "Th"});
+        variables.put("Entropy", new String[]{"ΔS", "ΔQ", "T"});
         
         // Waves and Oscillations
         variables.put("Wave Speed", new String[]{"v", "f", "λ"});
+        variables.put("Period", new String[]{"T", "f"});
+        variables.put("Frequency", new String[]{"f", "T"});
+        variables.put("Hooke's Law", new String[]{"F", "k", "x"});
+        variables.put("SHM Energy", new String[]{"E", "k", "A"});
+        variables.put("Resonance Frequency", new String[]{"f", "k", "m"});
+        variables.put("Doppler Effect", new String[]{"f'", "f", "v", "vo", "vs", "toward"});
+        variables.put("Sound Intensity", new String[]{"I", "P", "A"});
+        variables.put("Decibel Formula", new String[]{"β", "I", "I0"});
         
         // Optics
         variables.put("Lens Formula", new String[]{"f", "u", "v"});
@@ -1103,6 +1309,36 @@ public class InputOutputPanel extends JPanel {
         units.put("y1", "m");
         units.put("x2", "m");
         units.put("y2", "m");
+        units.put("U", "J");        // Gravitational Potential Energy (Joule)
+        units.put("M", "kg");       // Central mass (kilogram)
+        units.put("m", "kg");       // Orbiting mass (kilogram)  
+        units.put("r", "m");        // Distance/Radius (meter)
+        units.put("v", "m/s");      // Orbital velocity (meter/second)
+        units.put("T", "s");        // Orbital period (second)
+        units.put("s", "m");        // Distance (meter)
+        units.put("u", "m/s");      // Initial velocity (meter/second)
+        units.put("a", "m/s²");     // Acceleration (meter/second²)
+        units.put("I", "kg·m²");    // Moment of Inertia (kilogram meter squared)
+        units.put("P", "Pa");           // Pressure (Pascal) 
+        units.put("F", "N");            // Force (Newton)
+        units.put("A", "m²");           // Area (square meter)
+        units.put("ρ", "kg/m³");        // Density (kg per cubic meter)
+        units.put("V", "m³");           // Volume (cubic meter)
+        units.put("v", "m/s");          // Velocity (meter/second)
+        units.put("h", "m");            // Height (meter)
+        units.put("g", "m/s²");         // Gravity (meter/second²)
+        units.put("Y", "Pa");           // Young's Modulus (Pascal)
+        units.put("ΔL", "m");           // Change in length (meter)
+        units.put("L", "m");            // Original length (meter)
+        units.put("P0", "Pa");          // Initial pressure (Pascal)
+        units.put("T", "K");            // Temperature (Kelvin)
+        units.put("n", "mol");          // Number of moles (mole)
+        units.put("R", "J/(mol·K)");    // Gas constant
+        units.put("P_total", "Pa");     // Total pressure (Pascal)
+        units.put("P1", "Pa");          // Partial pressure 1
+        units.put("P2", "Pa");          // Partial pressure 2
+        units.put("P3", "Pa");          // Partial pressure 3
+        units.put("constant", "J/m³");  // Bernoulli constant (Energy per volume)
         
         return units.getOrDefault(variable, "");
     }
