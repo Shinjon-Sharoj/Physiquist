@@ -1,10 +1,10 @@
 package Ui;
 
 import java.awt.*;
-import java.util.*;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import javax.swing.*;
 
 public class InputOutputPanel extends JPanel {
 
@@ -436,10 +436,90 @@ public class InputOutputPanel extends JPanel {
                 return values.get("v") / values.get("f"); // λ
 
             // ========== OPTICS ==========
-            case "Lens Formula":
-                if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("v")) - (1.0 / values.get("u")));
-                if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) + (1.0 / values.get("u")));
-                return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
+            
+   // ---------- UNIT CONVERSION ----------
+private double toMeters(double value, String unit) {
+    return switch (unit.toLowerCase()) {
+        case "mm" -> value / 1000;
+        case "cm" -> value / 100;
+        case "km" -> value * 1000;
+        case "in" -> value * 0.0254;
+        case "ft" -> value * 0.3048;
+        default -> value; // meters
+    };
+}
+
+private double fromMeters(double value, String unit) {
+    return switch (unit.toLowerCase()) {
+        case "mm" -> value * 1000;
+        case "cm" -> value * 100;
+        case "km" -> value / 1000;
+        case "in" -> value / 0.0254;
+        case "ft" -> value / 0.3048;
+        default -> value; // meters
+    };
+}
+// ---------- LENS FORMULA ----------
+public String calculateLens(double u, double v, String uUnit, String vUnit, String fUnit) {
+    double f = 1 / ((1 / toMeters(v, vUnit)) - (1 / toMeters(u, uUnit)));
+    return String.format("Focal length f = %.4f %s", fromMeters(f, fUnit), fUnit);
+}
+
+// ---------- MIRROR FORMULA ----------
+public String calculateMirror(double u, double v, String uUnit, String vUnit, String fUnit) {
+    double f = 1 / ((1 / toMeters(u, uUnit)) + (1 / toMeters(v, vUnit)));
+    return String.format("Focal length f = %.4f %s", fromMeters(f, fUnit), fUnit);
+}
+
+// ---------- MAGNIFICATION ----------
+public String calculateMagnification(double u, double v, String uUnit, String vUnit) {
+    double m = -toMeters(v, vUnit) / toMeters(u, uUnit);
+    return String.format("Magnification m = %.4f", m);
+}
+
+// ---------- SNELL'S LAW ----------
+public String calculateSnellsLaw(double n1, double n2, double iDeg) {
+    double sinr = (n1 * Math.sin(Math.toRadians(iDeg))) / n2;
+    if (sinr > 1) return "Total Internal Reflection occurs!";
+    double r = Math.toDegrees(Math.asin(sinr));
+    return String.format("Refraction angle r = %.4f°", r);
+}
+
+// ---------- CRITICAL ANGLE ----------
+public String calculateCriticalAngle(double n1, double n2) {
+    if (n1 <= n2) return "n1 must be greater than n2.";
+    double C = Math.toDegrees(Math.asin(n2 / n1));
+    return String.format("Critical angle = %.4f°", C);
+}
+
+// ---------- TOTAL INTERNAL REFLECTION ----------
+public String checkTIR(double n1, double n2, double iDeg) {
+    if (n1 <= n2) return "TIR cannot occur since n1 <= n2.";
+    double critical = Math.toDegrees(Math.asin(n2 / n1));
+    if (iDeg > critical)
+        return String.format("✅ TIR occurs! Critical angle = %.4f°", critical);
+    else
+        return String.format("❌ No TIR. Critical angle = %.4f°", critical);
+}
+lensButton.addActionListener(e -> {
+    try {
+        double u = Double.parseDouble(uField.getText());
+        double v = Double.parseDouble(vField.getText());
+        String uUnit = (String) uUnitBox.getSelectedItem();
+        String vUnit = (String) vUnitBox.getSelectedItem();
+        String fUnit = (String) fUnitBox.getSelectedItem();
+
+        String result = calculateLens(u, v, uUnit, vUnit, fUnit);
+        outputArea.setText(result);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Please enter valid numbers!");
+    }
+});
+mirrorButton.addActionListener(e -> {
+    String result = calculateMirror(...);
+    outputArea.setText(result);
+});
+
 
             // ========== ELECTRICITY AND MAGNETISM ==========
             case "Ohm's Law":
