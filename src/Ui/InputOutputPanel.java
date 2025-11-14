@@ -585,9 +585,57 @@ public class InputOutputPanel extends JPanel {
 
             // ========== OPTICS ==========
             case "Lens Formula":
-                if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("v")) - (1.0 / values.get("u")));
-                if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) + (1.0 / values.get("u")));
-                return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
+    if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("v")) - (1.0 / values.get("u")));
+    if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) + (1.0 / values.get("u")));
+    return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
+
+case "Mirror Formula":
+    if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("u")) + (1.0 / values.get("v")));
+    if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("u")));
+    return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
+
+case "Magnification":
+    if (targetVariable.equals("m")) return -values.get("v") / values.get("u");
+    if (targetVariable.equals("h_prime")) return values.get("m") * values.get("h");
+    if (targetVariable.equals("h")) return values.get("h_prime") / values.get("m");
+    if (targetVariable.equals("v")) return -values.get("m") * values.get("u");
+    return -values.get("v") / values.get("m"); // u
+
+case "Snell's Law":
+    if (targetVariable.equals("n1")) return values.get("n2") * Math.sin(Math.toRadians(values.get("r"))) / Math.sin(Math.toRadians(values.get("i")));
+    if (targetVariable.equals("n2")) return values.get("n1") * Math.sin(Math.toRadians(values.get("i"))) / Math.sin(Math.toRadians(values.get("r")));
+    if (targetVariable.equals("i")) return Math.toDegrees(Math.asin(values.get("n2") * Math.sin(Math.toRadians(values.get("r"))) / values.get("n1")));
+    return Math.toDegrees(Math.asin(values.get("n1") * Math.sin(Math.toRadians(values.get("i"))) / values.get("n2"))); // r
+
+case "Critical Angle":
+    if (targetVariable.equals("C")) return Math.toDegrees(Math.asin(values.get("n2") / values.get("n1")));
+    if (targetVariable.equals("n1")) return values.get("n2") / Math.sin(Math.toRadians(values.get("C")));
+    return values.get("n1") * Math.sin(Math.toRadians(values.get("C"))); // n2
+
+case "Total Internal Reflection":
+    // Check if total internal reflection occurs
+    double n1 = values.get("n1");
+    double n2 = values.get("n2");
+    double i = values.get("i");
+    
+    if (n1 <= n2) return 0.0; // TIR only occurs when n1 > n2
+    
+    double criticalAngle = Math.toDegrees(Math.asin(n2 / n1));
+    
+    if (targetVariable.equals("occurs")) {
+        return (i > criticalAngle) ? 1.0 : 0.0;
+    }
+    
+    // For angle of refraction during TIR (returns 90° when TIR occurs)
+    if (targetVariable.equals("r")) {
+        if (i > criticalAngle) {
+            return 90.0; // Total internal reflection - no refraction
+        } else {
+            return Math.toDegrees(Math.asin(n1 * Math.sin(Math.toRadians(i)) / n2));
+        }
+    }
+    
+    return 0.0;
 
             // ========== ELECTRICITY AND MAGNETISM ==========
             case "Ohm's Law":
@@ -1122,6 +1170,12 @@ public class InputOutputPanel extends JPanel {
         formulaMap.put("Temperature Conversion", "K = °C + 273.15 | °F = °C × 9/5 + 32");
         formulaMap.put("Wave Speed", "v = f × λ");
         formulaMap.put("Lens Formula", "1/f = 1/v - 1/u");
+formulaMap.put("Mirror Formula", "1/f = 1/u + 1/v");
+formulaMap.put("Magnification", "m = h'/h = -v/u");
+formulaMap.put("Snell's Law", "n1 * sin(i) = n2 * sin(r)");
+formulaMap.put("Critical Angle", "sin(C) = n2 / n1");
+formulaMap.put("Total Internal Reflection", "Occurs when i > C and n1 * sin(i) = n2 * sin(r)");
+
         formulaMap.put("Ohm's Law", "V = I × R");
         formulaMap.put("Electric Power", "P = V × I");
         formulaMap.put("Coulomb's Law", "F = k × q₁ × q₂ / r²");
@@ -1219,6 +1273,11 @@ public class InputOutputPanel extends JPanel {
         
         // Optics
         variables.put("Lens Formula", new String[]{"f", "u", "v"});
+variables.put("Mirror Formula", new String[]{"f", "u", "v"});
+variables.put("Magnification", new String[]{"m", "h", "h_prime", "u", "v"});
+variables.put("Snell's Law", new String[]{"n1", "n2", "i", "r"});
+variables.put("Critical Angle", new String[]{"C", "n1", "n2"});
+variables.put("Total Internal Reflection", new String[]{"occurs", "n1", "n2", "i", "r"});
         
         // Electricity and Magnetism
         variables.put("Ohm's Law", new String[]{"V", "I", "R"});
