@@ -27,7 +27,7 @@ public class WelcomePanel extends JPanel {
             backgroundImage = null; // fallback
         }
 
-        // ===== "Let's Start" Button =====
+    
         JButton startButton = new JButton("Let's Start");
         startButton.setFont(new Font("Segoe UI", Font.BOLD, 28));
         startButton.setForeground(Color.WHITE);

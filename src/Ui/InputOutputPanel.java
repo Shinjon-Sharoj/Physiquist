@@ -1725,8 +1725,8 @@ case "Dalton's Law of Partial Pressure":
         units.put("k", "N/m");          // Spring constant
         units.put("x", "m");            // Displacement
         units.put("A", "m");            // Amplitude
-        units.put("f", "Hz");           // Frequency
-        units.put("f'", "Hz");          // Observed frequency
+        units.put("f", "Hz");           
+        units.put("f'", "Hz");          // Oed frequency
         units.put("vo", "m/s");         // Observer velocity
         units.put("vs", "m/s");         // Source velocity
         units.put("β", "dB");           // Decibels
