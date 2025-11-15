@@ -1723,13 +1723,13 @@ case "Dalton's Law of Partial Pressure":
         units.put("P3", "Pa");          // Partial pressure 3
         units.put("constant", "J/m³");  // Bernoulli constant (Energy per volume)
         units.put("k", "N/m");          // Spring constant
-        units.put("x", "m");            // Displacement
-        units.put("A", "m");            // Amplitude
+        units.put("x", "m");            
+        units.put("A", "m");            
         units.put("f", "Hz");           
-        units.put("f'", "Hz");          // Oed frequency
-        units.put("vo", "m/s");         // Observer velocity
-        units.put("vs", "m/s");         // Source velocity
-        units.put("β", "dB");           // Decibels
+        units.put("f'", "Hz");          
+        units.put("vo", "m/s");         
+        units.put("vs", "m/s");         
+        units.put("β", "dB");           
         units.put("n1", "—");           // Refractive index 1
         units.put("n2", "—");           // Refractive index 2
         units.put("i", "°");            // Incident angle

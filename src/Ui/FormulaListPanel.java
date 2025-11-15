@@ -12,7 +12,7 @@ public class FormulaListPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // ========== ALL FORMULAS ==========
+
 
         formulas.put("Mechanics", new String[]{
             "Velocity", "Acceleration", "Force", "Work", "Power", 
