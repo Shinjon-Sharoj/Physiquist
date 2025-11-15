@@ -1,10 +1,10 @@
 package Ui;
 
 import java.awt.*;
-import java.util.*;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import javax.swing.*;
 
 public class InputOutputPanel extends JPanel {
 
@@ -306,10 +306,10 @@ public class InputOutputPanel extends JPanel {
                 return Math.pow(values.get("v"), 2) / values.get("ac"); // r
 
             case "Torque":
-                if (targetVariable.equals("τ")) return values.get("r") * values.get("F") * Math.sin(values.get("θ"));
-                if (targetVariable.equals("F")) return values.get("τ") / (values.get("r") * Math.sin(values.get("θ")));
-                if (targetVariable.equals("r")) return values.get("τ") / (values.get("F") * Math.sin(values.get("θ")));
-                return Math.asin(values.get("τ") / (values.get("r") * values.get("F"))); // θ
+                if (targetVariable.equals("τ")) return values.get("r") * values.get("F") * Math.sin(Math.toRadians(values.get("θ")));
+                if (targetVariable.equals("F")) return values.get("τ") / (values.get("r") * Math.sin(Math.toRadians(values.get("θ"))));
+                if (targetVariable.equals("r")) return values.get("τ") / (values.get("F") * Math.sin(Math.toRadians(values.get("θ"))));
+                return Math.toDegrees(Math.asin(values.get("τ") / (values.get("r") * values.get("F")))); // θ
 
             case "Angular Momentum":
                 if (targetVariable.equals("L")) return values.get("I") * values.get("ω");
@@ -351,16 +351,16 @@ public class InputOutputPanel extends JPanel {
                 return (Math.pow(values.get("v"), 2) - Math.pow(values.get("u"), 2)) / (2 * values.get("a")); // s
 
             case "Maximum Height":
-                if (targetVariable.equals("H")) return Math.pow(values.get("u") * Math.sin(values.get("θ")), 2) / (2 * values.get("g"));
-                if (targetVariable.equals("u")) return Math.sqrt((2 * values.get("H") * values.get("g"))) / Math.sin(values.get("θ"));
-                if (targetVariable.equals("θ")) return Math.asin(Math.sqrt((2 * values.get("H") * values.get("g")) / Math.pow(values.get("u"), 2)));
-                return (Math.pow(values.get("u") * Math.sin(values.get("θ")), 2)) / (2 * values.get("H")); // g
+                if (targetVariable.equals("H")) return Math.pow(values.get("u") * Math.sin(Math.toRadians(values.get("θ"))), 2) / (2 * values.get("g"));
+                if (targetVariable.equals("u")) return Math.sqrt((2 * values.get("H") * values.get("g"))) / Math.sin(Math.toRadians(values.get("θ")));
+                if (targetVariable.equals("θ")) return Math.toDegrees(Math.asin(Math.sqrt((2 * values.get("H") * values.get("g")) / Math.pow(values.get("u"), 2))));
+                return (Math.pow(values.get("u") * Math.sin(Math.toRadians(values.get("θ"))), 2)) / (2 * values.get("H")); // g
 
             case "Time of Flight":
-                if (targetVariable.equals("T")) return (2 * values.get("u") * Math.sin(values.get("θ"))) / values.get("g");
-                if (targetVariable.equals("u")) return (values.get("T") * values.get("g")) / (2 * Math.sin(values.get("θ")));
-                if (targetVariable.equals("θ")) return Math.asin((values.get("T") * values.get("g")) / (2 * values.get("u")));
-                return (2 * values.get("u") * Math.sin(values.get("θ"))) / values.get("T"); // g
+                if (targetVariable.equals("T")) return (2 * values.get("u") * Math.sin(Math.toRadians(values.get("θ")))) / values.get("g");
+                if (targetVariable.equals("u")) return (values.get("T") * values.get("g")) / (2 * Math.sin(Math.toRadians(values.get("θ"))));
+                if (targetVariable.equals("θ")) return Math.toDegrees(Math.asin((values.get("T") * values.get("g")) / (2 * values.get("u"))));
+                return (2 * values.get("u") * Math.sin(Math.toRadians(values.get("θ")))) / values.get("T"); // g
 
             case "Tension":
                 if (targetVariable.equals("T")) {
@@ -405,29 +405,195 @@ public class InputOutputPanel extends JPanel {
                 if (targetVariable.equals("M")) return (values.get("g") * Math.pow(values.get("r"), 2)) / G;
                 return Math.sqrt((G * values.get("M")) / values.get("g")); // r
 
+            case "Gravitational Potential Energy":
+               if (targetVariable.equals("U")) return - (G * values.get("M") * values.get("m")) / values.get("r");
+               if (targetVariable.equals("M")) return - (values.get("U") * values.get("r")) / (G * values.get("m"));
+               if (targetVariable.equals("m")) return - (values.get("U") * values.get("r")) / (G * values.get("M"));
+               return - (G * values.get("M") * values.get("m")) / values.get("U"); // r
+
+            case "Orbital Velocity":
+               if (targetVariable.equals("v")) return Math.sqrt((G * values.get("M")) / values.get("r"));
+               if (targetVariable.equals("M")) return (Math.pow(values.get("v"), 2) * values.get("r")) / G;
+               return (G * values.get("M")) / Math.pow(values.get("v"), 2); // r
+
+            case "Kepler's Laws":
+               if (targetVariable.equals("T")) return 2 * Math.PI * Math.sqrt(Math.pow(values.get("r"), 3) / (G * values.get("M")));
+               if (targetVariable.equals("r")) return Math.cbrt((Math.pow(values.get("T"), 2) * G * values.get("M")) / (4 * Math.PI * Math.PI));
+               return (4 * Math.PI * Math.PI * Math.pow(values.get("r"), 3)) / (G * Math.pow(values.get("T"), 2)); // M
+
+            case "Distance-Time Relation":
+               if (targetVariable.equals("s")) return values.get("u") * values.get("t") + 0.5 * values.get("a") * Math.pow(values.get("t"), 2);
+               if (targetVariable.equals("u")) return (values.get("s") - 0.5 * values.get("a") * Math.pow(values.get("t"), 2)) / values.get("t");
+               if (targetVariable.equals("a")) return (2 * (values.get("s") - values.get("u") * values.get("t"))) / Math.pow(values.get("t"), 2);
+               // For time, solve quadratic equation
+               double a_val = 0.5 * values.get("a");
+               double b_val = values.get("u");
+               double c_val = -values.get("s");
+               double discriminant = b_val * b_val - 4 * a_val * c_val;
+               return (-b_val + Math.sqrt(discriminant)) / (2 * a_val); // t
+
+            case "Velocity-Time Relation":
+              if (targetVariable.equals("v")) return values.get("u") + values.get("a") * values.get("t");
+              if (targetVariable.equals("u")) return values.get("v") - values.get("a") * values.get("t");
+              if (targetVariable.equals("a")) return (values.get("v") - values.get("u")) / values.get("t");
+              return (values.get("v") - values.get("u")) / values.get("a"); // t
+
+            case "Moment of Inertia":
+              if (targetVariable.equals("I")) return values.get("m") * Math.pow(values.get("r"), 2);
+              if (targetVariable.equals("m")) return values.get("I") / Math.pow(values.get("r"), 2);
+              return Math.sqrt(values.get("I") / values.get("m")); // r
+
             // ========== FLUID MECHANICS ==========
-            case "Pressure":
-                if (targetVariable.equals("P")) return values.get("F") / values.get("A");
-                if (targetVariable.equals("F")) return values.get("P") * values.get("A");
-                return values.get("F") / values.get("P"); // A
-                
-            case "Density":
-                if (targetVariable.equals("ρ")) return values.get("m") / values.get("V");
-                if (targetVariable.equals("m")) return values.get("ρ") * values.get("V");
-                return values.get("m") / values.get("ρ"); // V
+           case "Pressure":
+    if (targetVariable.equals("P")) return values.get("F") / values.get("A");
+    if (targetVariable.equals("F")) return values.get("P") * values.get("A");
+    return values.get("F") / values.get("P"); // A
+
+case "Density":
+    if (targetVariable.equals("ρ")) return values.get("m") / values.get("V");
+    if (targetVariable.equals("m")) return values.get("ρ") * values.get("V");
+    return values.get("m") / values.get("ρ"); // V
+
+case "Bernoulli's Principle":
+    // For simplicity, solving for individual components
+    if (targetVariable.equals("P")) return values.get("constant") - (0.5 * values.get("ρ") * Math.pow(values.get("v"), 2)) - (values.get("ρ") * g * values.get("h"));
+    if (targetVariable.equals("v")) return Math.sqrt(2 * (values.get("constant") - values.get("P") - values.get("ρ") * g * values.get("h")) / values.get("ρ"));
+    if (targetVariable.equals("h")) return (values.get("constant") - values.get("P") - 0.5 * values.get("ρ") * Math.pow(values.get("v"), 2)) / (values.get("ρ") * g);
+    return values.get("P") + (0.5 * values.get("ρ") * Math.pow(values.get("v"), 2)) + (values.get("ρ") * g * values.get("h")); // constant
+
+case "Elasticity":
+    if (targetVariable.equals("Y")) return (values.get("F") / values.get("A")) / (values.get("ΔL") / values.get("L"));
+    if (targetVariable.equals("F")) return values.get("Y") * values.get("A") * (values.get("ΔL") / values.get("L"));
+    if (targetVariable.equals("A")) return values.get("F") / (values.get("Y") * (values.get("ΔL") / values.get("L")));
+    if (targetVariable.equals("ΔL")) return (values.get("F") / values.get("A")) * values.get("L") / values.get("Y");
+    return (values.get("F") / values.get("A")) * values.get("L") / values.get("ΔL"); // L
+
+case "Pressure in Gases":
+    if (targetVariable.equals("P")) return (1.0/3.0) * values.get("ρ") * Math.pow(values.get("v"), 2);
+    if (targetVariable.equals("ρ")) return 3 * values.get("P") / Math.pow(values.get("v"), 2);
+    return Math.sqrt(3 * values.get("P") / values.get("ρ")); // v
+
+case "Fluid Pressure (Hydrostatic Pressure)":
+    if (targetVariable.equals("P")) return values.get("ρ") * g * values.get("h");
+    if (targetVariable.equals("ρ")) return values.get("P") / (g * values.get("h"));
+    if (targetVariable.equals("h")) return values.get("P") / (values.get("ρ") * g);
+    return 0.0;
+
+case "Atmospheric Pressure":
+    if (targetVariable.equals("P")) return values.get("h") * values.get("ρ") * g;
+    if (targetVariable.equals("h")) return values.get("P") / (values.get("ρ") * g);
+    if (targetVariable.equals("ρ")) return values.get("P") / (values.get("h") * g);
+    return 0.0;
+
+case "Pascal's Law":
+    if (targetVariable.equals("F1")) return values.get("F2") * values.get("A1") / values.get("A2");
+    if (targetVariable.equals("F2")) return values.get("F1") * values.get("A2") / values.get("A1");
+    if (targetVariable.equals("A1")) return values.get("F1") * values.get("A2") / values.get("F2");
+    return values.get("F2") * values.get("A1") / values.get("F1"); // A2
+
+case "Pressure due to Depth in Fluid":
+    if (targetVariable.equals("P")) return values.get("P0") + values.get("ρ") * g * values.get("h");
+    if (targetVariable.equals("P0")) return values.get("P") - values.get("ρ") * g * values.get("h");
+    if (targetVariable.equals("ρ")) return (values.get("P") - values.get("P0")) / (g * values.get("h"));
+    if (targetVariable.equals("h")) return (values.get("P") - values.get("P0")) / (values.get("ρ") * g);
+    return 0.0;
+
+case "Boyle's Law":
+    if (targetVariable.equals("P1")) return values.get("P2") * values.get("V2") / values.get("V1");
+    if (targetVariable.equals("P2")) return values.get("P1") * values.get("V1") / values.get("V2");
+    if (targetVariable.equals("V1")) return values.get("P2") * values.get("V2") / values.get("P1");
+    return values.get("P1") * values.get("V1") / values.get("P2"); // V2
+
+case "Charles's Law":
+    if (targetVariable.equals("V1")) return values.get("V2") * values.get("T1") / values.get("T2");
+    if (targetVariable.equals("V2")) return values.get("V1") * values.get("T2") / values.get("T1");
+    if (targetVariable.equals("T1")) return values.get("V1") * values.get("T2") / values.get("V2");
+    return values.get("V2") * values.get("T1") / values.get("V1"); // T2
+
+case "Gay-Lussac's Law":
+    if (targetVariable.equals("P1")) return values.get("P2") * values.get("T1") / values.get("T2");
+    if (targetVariable.equals("P2")) return values.get("P1") * values.get("T2") / values.get("T1");
+    if (targetVariable.equals("T1")) return values.get("P1") * values.get("T2") / values.get("P2");
+    return values.get("P2") * values.get("T1") / values.get("P1"); // T2
+
+case "Avogadro's Law":
+    if (targetVariable.equals("V1")) return values.get("V2") * values.get("n1") / values.get("n2");
+    if (targetVariable.equals("V2")) return values.get("V1") * values.get("n2") / values.get("n1");
+    if (targetVariable.equals("n1")) return values.get("V1") * values.get("n2") / values.get("V2");
+    return values.get("V2") * values.get("n1") / values.get("V1"); // n2
+
+case "Combined Gas Law":
+    if (targetVariable.equals("P1")) return values.get("P2") * values.get("V2") * values.get("T1") / (values.get("V1") * values.get("T2"));
+    if (targetVariable.equals("V1")) return values.get("P2") * values.get("V2") * values.get("T1") / (values.get("P1") * values.get("T2"));
+    if (targetVariable.equals("T1")) return values.get("P1") * values.get("V1") * values.get("T2") / (values.get("P2") * values.get("V2"));
+    if (targetVariable.equals("P2")) return values.get("P1") * values.get("V1") * values.get("T2") / (values.get("V2") * values.get("T1"));
+    if (targetVariable.equals("V2")) return values.get("P1") * values.get("V1") * values.get("T2") / (values.get("P2") * values.get("T1"));
+    return values.get("P2") * values.get("V2") * values.get("T1") / (values.get("P1") * values.get("V1")); // T2
+
+case "Ideal Gas Law":
+    double R = 8.314; // J/mol·K
+    if (targetVariable.equals("P")) return values.get("n") * R * values.get("T") / values.get("V");
+    if (targetVariable.equals("V")) return values.get("n") * R * values.get("T") / values.get("P");
+    if (targetVariable.equals("n")) return values.get("P") * values.get("V") / (R * values.get("T"));
+    return values.get("P") * values.get("V") / (values.get("n") * R); // T
+
+case "Dalton's Law of Partial Pressure":
+    // Sum all partial pressures
+    double totalPressure = 0;
+    for (String key : values.keySet()) {
+        if (key.startsWith("P") && !key.equals("P_total")) {
+            totalPressure += values.get(key);
+        }
+    }
+    if (targetVariable.equals("P_total")) return totalPressure;
+    
+    // For individual partial pressures
+    if (targetVariable.startsWith("P")) {
+        double otherPressures = 0;
+        for (String key : values.keySet()) {
+            if (key.startsWith("P") && !key.equals(targetVariable) && !key.equals("P_total")) {
+                otherPressures += values.get(key);
+            }
+        }
+        return values.get("P_total") - otherPressures;
+    }
+    return 0.0;
 
             // ========== THERMODYNAMICS ==========
             case "Temperature Conversion":
                 if (targetVariable.equals("K")) {
                     if (values.containsKey("°C")) return values.get("°C") + 273.15;
-                    return (values.get("°F") - 32) * 5.0/9.0 + 273.15;
-                } else if (targetVariable.equals("°C")) {
-                    if (values.containsKey("K")) return values.get("K") - 273.15;
-                    return (values.get("°F") - 32) * 5.0/9.0;
-                } else { // °F
-                    if (values.containsKey("K")) return (values.get("K") - 273.15) * 9.0/5.0 + 32;
-                    return values.get("°C") * 9.0/5.0 + 32;
+                    if (values.containsKey("°F")) return (values.get("°F") - 32) * 5/9 + 273.15;
                 }
+                if (targetVariable.equals("°C")) {
+                    if (values.containsKey("K")) return values.get("K") - 273.15;
+                    if (values.containsKey("°F")) return (values.get("°F") - 32) * 5/9;
+                }
+                if (targetVariable.equals("°F")) {
+                    if (values.containsKey("°C")) return values.get("°C") * 9/5 + 32;
+                    if (values.containsKey("K")) return (values.get("K") - 273.15) * 9/5 + 32;
+                }
+                return 0.0;
+
+            case "First Law of Thermodynamics":
+                if (targetVariable.equals("ΔQ")) return values.get("ΔU") + values.get("W");
+                if (targetVariable.equals("ΔU")) return values.get("ΔQ") - values.get("W");
+                return values.get("ΔQ") - values.get("ΔU"); // W
+
+            case "Heat Engine Efficiency":
+                if (targetVariable.equals("η")) return 1 - (values.get("Qc") / values.get("Qh"));
+                if (targetVariable.equals("Qc")) return values.get("Qh") * (1 - values.get("η"));
+                return values.get("Qc") / (1 - values.get("η")); // Qh
+
+            case "Carnot Efficiency":
+                if (targetVariable.equals("η")) return 1 - (values.get("Tc") / values.get("Th"));
+                if (targetVariable.equals("Tc")) return values.get("Th") * (1 - values.get("η"));
+                return values.get("Tc") / (1 - values.get("η")); // Th
+
+            case "Entropy":
+                if (targetVariable.equals("ΔS")) return values.get("ΔQ") / values.get("T");
+                if (targetVariable.equals("ΔQ")) return values.get("ΔS") * values.get("T");
+                return values.get("ΔQ") / values.get("ΔS"); // T
 
             // ========== WAVES AND OSCILLATIONS ==========
             case "Wave Speed":
@@ -435,37 +601,268 @@ public class InputOutputPanel extends JPanel {
                 if (targetVariable.equals("f")) return values.get("v") / values.get("λ");
                 return values.get("v") / values.get("f"); // λ
 
+            case "Period":
+                if (targetVariable.equals("T")) return 1.0 / values.get("f");
+                if (targetVariable.equals("f")) return 1.0 / values.get("T");
+                return 1.0 / values.get("T"); // Default return
+
+            case "Hooke's Law (Spring)":
+                if (targetVariable.equals("F")) return values.get("k") * values.get("x");
+                if (targetVariable.equals("k")) return values.get("F") / values.get("x");
+                return values.get("F") / values.get("k"); // x
+
+            case "Energy in Simple Harmonic Oscillator":
+                if (targetVariable.equals("E")) return 0.5 * values.get("k") * Math.pow(values.get("A"), 2);
+                if (targetVariable.equals("k")) return 2 * values.get("E") / Math.pow(values.get("A"), 2);
+                return Math.sqrt(2 * values.get("E") / values.get("k")); // A
+
+            case "Resonance Frequency":
+                if (targetVariable.equals("f")) return (1.0 / (2 * Math.PI)) * Math.sqrt(values.get("k") / values.get("m"));
+                if (targetVariable.equals("k")) return Math.pow(2 * Math.PI * values.get("f"), 2) * values.get("m");
+                return values.get("k") / Math.pow(2 * Math.PI * values.get("f"), 2); // m
+
+            case "Doppler Effect":
+                // For simplicity, assuming moving toward each other (use + for vo and - for vs)
+                double v_sound = values.get("v");  // speed of sound
+                double vo = values.get("vo"); // observer speed
+                double vs = values.get("vs"); // source speed
+                double f = values.get("f");   // original frequency
+                
+                if (targetVariable.equals("f'")) {
+                    return f * (v_sound + vo) / (v_sound - vs);
+                }
+                if (targetVariable.equals("f")) {
+                    return values.get("f'") * (v_sound - vs) / (v_sound + vo);
+                }
+                if (targetVariable.equals("vo")) {
+                    return (values.get("f'") * (v_sound - vs) / f) - v_sound;
+                }
+                return v_sound - (values.get("f'") * (v_sound + vo) / f); // vs
+
+            case "Sound Intensity":
+                if (targetVariable.equals("I")) return values.get("P") / values.get("A");
+                if (targetVariable.equals("P")) return values.get("I") * values.get("A");
+                return values.get("P") / values.get("I"); // A
+
+            case "Decibel Formula":
+                double I0 = 1e-12; // Reference intensity (W/m²)
+                if (targetVariable.equals("β")) return 10 * Math.log10(values.get("I") / I0);
+                if (targetVariable.equals("I")) return I0 * Math.pow(10, values.get("β") / 10);
+                return 0.0;
+
             // ========== OPTICS ==========
             case "Lens Formula":
                 if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("v")) - (1.0 / values.get("u")));
                 if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) + (1.0 / values.get("u")));
                 return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
 
+            case "Mirror Formula":
+                if (targetVariable.equals("f")) return 1.0 / ((1.0 / values.get("u")) + (1.0 / values.get("v")));
+                if (targetVariable.equals("v")) return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("u")));
+                return 1.0 / ((1.0 / values.get("f")) - (1.0 / values.get("v"))); // u
+
+            case "Magnification":
+                if (targetVariable.equals("m")) return -values.get("v") / values.get("u");
+                if (targetVariable.equals("h_prime")) return values.get("m") * values.get("h");
+                if (targetVariable.equals("h")) return values.get("h_prime") / values.get("m");
+                if (targetVariable.equals("v")) return -values.get("m") * values.get("u");
+                return -values.get("v") / values.get("m"); // u
+
+            case "Snell's Law":
+                if (targetVariable.equals("n1")) return values.get("n2") * Math.sin(Math.toRadians(values.get("r"))) / Math.sin(Math.toRadians(values.get("i")));
+                if (targetVariable.equals("n2")) return values.get("n1") * Math.sin(Math.toRadians(values.get("i"))) / Math.sin(Math.toRadians(values.get("r")));
+                if (targetVariable.equals("i")) return Math.toDegrees(Math.asin(values.get("n2") * Math.sin(Math.toRadians(values.get("r"))) / values.get("n1")));
+                return Math.toDegrees(Math.asin(values.get("n1") * Math.sin(Math.toRadians(values.get("i"))) / values.get("n2"))); // r
+
+            case "Critical Angle":
+                if (targetVariable.equals("C")) return Math.toDegrees(Math.asin(values.get("n2") / values.get("n1")));
+                if (targetVariable.equals("n1")) return values.get("n2") / Math.sin(Math.toRadians(values.get("C")));
+                return values.get("n1") * Math.sin(Math.toRadians(values.get("C"))); // n2
+
+            case "Total Internal Reflection":
+                // Check if total internal reflection occurs
+                double n1 = values.get("n1");
+                double n2 = values.get("n2");
+                double i = values.get("i");
+                
+                if (n1 <= n2) return 0.0; // TIR only occurs when n1 > n2
+                
+                double criticalAngle = Math.toDegrees(Math.asin(n2 / n1));
+                
+                if (targetVariable.equals("occurs")) {
+                    return (i > criticalAngle) ? 1.0 : 0.0;
+                }
+                
+                // For angle of refraction during TIR (returns 90° when TIR occurs)
+                if (targetVariable.equals("r")) {
+                    if (i > criticalAngle) {
+                        return 90.0; // Total internal reflection - no refraction
+                    } else {
+                        return Math.toDegrees(Math.asin(n1 * Math.sin(Math.toRadians(i)) / n2));
+                    }
+                }
+                
+                return 0.0;
+
             // ========== ELECTRICITY AND MAGNETISM ==========
+            case "Electric Potential":
+                if (targetVariable.equals("V")) return k * values.get("Q") / values.get("r");
+                if (targetVariable.equals("Q")) return values.get("V") * values.get("r") / k;
+                return k * values.get("Q") / values.get("V"); // r
+
+            case "Electric Field":
+                if (targetVariable.equals("E")) {
+                    if (values.containsKey("F") && values.containsKey("q")) {
+                        return values.get("F") / values.get("q");
+                    } else {
+                        return k * values.get("Q") / Math.pow(values.get("r"), 2);
+                    }
+                }
+                if (targetVariable.equals("F")) return values.get("E") * values.get("q");
+                if (targetVariable.equals("q")) return values.get("F") / values.get("E");
+                if (targetVariable.equals("Q")) return values.get("E") * Math.pow(values.get("r"), 2) / k;
+                return Math.sqrt(k * values.get("Q") / values.get("E")); // r
+
+            case "Coulomb's Law":
+                if (targetVariable.equals("F")) return k * values.get("q1") * values.get("q2") / Math.pow(values.get("r"), 2);
+                if (targetVariable.equals("q1")) return values.get("F") * Math.pow(values.get("r"), 2) / (k * values.get("q2"));
+                if (targetVariable.equals("q2")) return values.get("F") * Math.pow(values.get("r"), 2) / (k * values.get("q1"));
+                return Math.sqrt(k * values.get("q1") * values.get("q2") / values.get("F")); // r
+
             case "Ohm's Law":
                 if (targetVariable.equals("V")) return values.get("I") * values.get("R");
                 if (targetVariable.equals("I")) return values.get("V") / values.get("R");
                 return values.get("V") / values.get("I"); // R
-                
-            case "Electric Power":
-                if (targetVariable.equals("P")) return values.get("V") * values.get("I");
-                if (targetVariable.equals("V")) return values.get("P") / values.get("I");
-                return values.get("P") / values.get("V"); // I
-                
-            case "Coulomb's Law":
-                if (targetVariable.equals("F")) return k * values.get("q1") * values.get("q2") / Math.pow(values.get("r"), 2);
-                if (targetVariable.equals("q1")) return values.get("F") * Math.pow(values.get("r"), 2) / (k * values.get("q2"));
-                return Math.sqrt(k * values.get("q1") * values.get("q2") / values.get("F")); // r
 
+            case "Electric Power":
+                if (targetVariable.equals("P")) {
+                    if (values.containsKey("V") && values.containsKey("I")) {
+                        return values.get("V") * values.get("I");
+                    } else if (values.containsKey("I") && values.containsKey("R")) {
+                        return Math.pow(values.get("I"), 2) * values.get("R");
+                    } else if (values.containsKey("V") && values.containsKey("R")) {
+                        return Math.pow(values.get("V"), 2) / values.get("R");
+                    }
+                }
+                if (targetVariable.equals("V")) {
+                    if (values.containsKey("I") && values.containsKey("R")) {
+                        return values.get("I") * values.get("R");
+                    } else {
+                        return Math.sqrt(values.get("P") * values.get("R"));
+                    }
+                }
+                if (targetVariable.equals("I")) {
+                    if (values.containsKey("V") && values.containsKey("R")) {
+                        return values.get("V") / values.get("R");
+                    } else {
+                        return Math.sqrt(values.get("P") / values.get("R"));
+                    }
+                }
+                if (targetVariable.equals("R")) {
+                    if (values.containsKey("V") && values.containsKey("I")) {
+                        return values.get("V") / values.get("I");
+                    } else if (values.containsKey("P") && values.containsKey("I")) {
+                        return values.get("P") / Math.pow(values.get("I"), 2);
+                    } else {
+                        return Math.pow(values.get("V"), 2) / values.get("P");
+                    }
+                }
+                return 0.0;
+
+            case "Series Resistance":
+                // For simplicity, assuming R1, R2, R3 as inputs
+                double seriesSum = 0;
+                for (String key : values.keySet()) {
+                    if (key.startsWith("R")) {
+                        seriesSum += values.get(key);
+                    }
+                }
+                return seriesSum; // Rs
+
+            case "Parallel Resistance":
+                // For simplicity, assuming R1, R2, R3 as inputs
+                double parallelSum = 0;
+                for (String key : values.keySet()) {
+                    if (key.startsWith("R")) {
+                        parallelSum += 1.0 / values.get(key);
+                    }
+                }
+                return 1.0 / parallelSum; // Rp
+
+            case "Magnetic Field (Due to a Straight Wire)":
+                double mu0 = 4 * Math.PI * 1e-7; // μ0 constant
+                if (targetVariable.equals("B")) return (mu0 * values.get("I")) / (2 * Math.PI * values.get("r"));
+                if (targetVariable.equals("I")) return values.get("B") * 2 * Math.PI * values.get("r") / mu0;
+                return (mu0 * values.get("I")) / (2 * Math.PI * values.get("B")); // r
+
+            case "Charge":
+                if (targetVariable.equals("Q")) return values.get("I") * values.get("t");
+                if (targetVariable.equals("I")) return values.get("Q") / values.get("t");
+                return values.get("Q") / values.get("I"); // t
+
+            case "Inductance":
+                // Simplified version - assumes dI/dt is provided
+                if (targetVariable.equals("V")) return values.get("L") * values.get("dI_dt");
+                if (targetVariable.equals("L")) return values.get("V") / values.get("dI_dt");
+                return values.get("V") / values.get("L"); // dI_dt
+
+            case "Conductivity":
+                if (targetVariable.equals("σ")) return 1.0 / values.get("ρ");
+                return 1.0 / values.get("σ"); // ρ
+
+            case "Faraday's Law of Electromagnetic Induction":
+                // Simplified version - assumes dΦ/dt is provided
+                if (targetVariable.equals("ε")) return -values.get("dΦ_dt");
+                return -values.get("ε"); // dΦ_dt
+                
             // ========== MODERN PHYSICS ==========
             case "Mass-Energy Equivalence":
                 if (targetVariable.equals("E")) return values.get("m") * Math.pow(c, 2);
                 return values.get("E") / Math.pow(c, 2); // m
-                
+
             case "Photon Energy":
                 if (targetVariable.equals("E")) return h * values.get("f");
                 if (targetVariable.equals("f")) return values.get("E") / h;
                 return values.get("E") / values.get("f"); // h
+
+            case "de Broglie Wavelength":
+                if (targetVariable.equals("λ")) return h / values.get("p");
+                if (targetVariable.equals("p")) return h / values.get("λ");
+                return h / values.get("p"); // h (though usually we know h)
+
+            case "Photoelectric Effect (Einstein's Equation)":
+                if (targetVariable.equals("E_k")) return h * values.get("f") - values.get("φ");
+                if (targetVariable.equals("f")) return (values.get("E_k") + values.get("φ")) / h;
+                if (targetVariable.equals("φ")) return h * values.get("f") - values.get("E_k");
+                return (values.get("E_k") + values.get("φ")) / values.get("f"); // h
+
+            case "Nuclear Fission":
+                // Simplified - energy released based on mass defect
+                if (targetVariable.equals("E")) return (values.get("m_initial") - values.get("m_final")) * Math.pow(c, 2);
+                if (targetVariable.equals("m_initial")) return values.get("E") / Math.pow(c, 2) + values.get("m_final");
+                return values.get("m_initial") - values.get("E") / Math.pow(c, 2); // m_final
+
+            case "Nuclear Fusion":
+                // Simplified - energy released based on mass defect
+                if (targetVariable.equals("E")) return (values.get("m_initial") - values.get("m_final")) * Math.pow(c, 2);
+                if (targetVariable.equals("m_initial")) return values.get("E") / Math.pow(c, 2) + values.get("m_final");
+                return values.get("m_initial") - values.get("E") / Math.pow(c, 2); // m_final
+
+            case "Half-Life Formula":
+                if (targetVariable.equals("T1/2")) return 0.693 / values.get("λ");
+                if (targetVariable.equals("λ")) return 0.693 / values.get("T1/2");
+                return 0.693 / values.get("λ"); // Default return
+
+            case "Radioactive Decay Law":
+                if (targetVariable.equals("N")) return values.get("N0") * Math.exp(-values.get("λ") * values.get("t"));
+                if (targetVariable.equals("N0")) return values.get("N") / Math.exp(-values.get("λ") * values.get("t"));
+                if (targetVariable.equals("λ")) return -Math.log(values.get("N") / values.get("N0")) / values.get("t");
+                return -Math.log(values.get("N") / values.get("N0")) / values.get("λ"); // t
+
+            case "Electromagnetic Wave":
+                if (targetVariable.equals("c")) return values.get("λ") * values.get("f");
+                if (targetVariable.equals("λ")) return values.get("c") / values.get("f");
+                return values.get("c") / values.get("λ"); // f
 
             // ========== VECTOR ==========
             case "Displacement Vector":
@@ -595,6 +992,18 @@ public class InputOutputPanel extends JPanel {
             return new String[]{"Ω", "kΩ", "MΩ"};
         } else if (isChargeVariable(variable)) {
             return new String[]{"C", "mC", "μC"};
+        } else if (isFrequencyVariable(variable)) {
+            return new String[]{"Hz", "kHz", "MHz", "GHz"};
+        } else if (isSpringConstantVariable(variable)) {
+            return new String[]{"N/m", "N/cm", "N/mm"};
+        } else if (isRefractiveIndexVariable(variable)) {
+            return new String[]{"—"}; // dimensionless
+        } else if (isHeatVariable(variable)) {
+            return new String[]{"J", "kJ", "cal", "kcal", "eV", "BTU"};
+        } else if (isEntropyVariable(variable)) {
+            return new String[]{"J/K"};
+        } else if (isEfficiencyVariable(variable)) {
+            return new String[]{"—"}; // dimensionless
         }
         // Default - return only base unit
         return new String[]{getUnitForVariable(variable)};
@@ -604,16 +1013,17 @@ public class InputOutputPanel extends JPanel {
     private boolean isLengthVariable(String variable) {
         return variable.equals("d") || variable.equals("r") || variable.equals("h") || 
                variable.equals("s") || variable.equals("λ") || variable.equals("dy") ||
-               variable.contains("x") || variable.contains("y");
+               variable.contains("x") || variable.contains("y") || variable.equals("A") ||
+               variable.equals("L") || variable.equals("ΔL") || variable.equals("x");
     }
 
     private boolean isMassVariable(String variable) {
         return variable.equals("m") || variable.equals("m1") || variable.equals("m2") || 
-               variable.equals("M");
+               variable.equals("M") || variable.equals("m_initial") || variable.equals("m_final");
     }
 
     private boolean isTimeVariable(String variable) {
-        return variable.equals("t") || variable.equals("T");
+        return variable.equals("t") || variable.equals("T") || variable.equals("T1/2");
     }
 
     private boolean isForceVariable(String variable) {
@@ -623,11 +1033,13 @@ public class InputOutputPanel extends JPanel {
 
     private boolean isEnergyVariable(String variable) {
         return variable.equals("W") || variable.equals("KE") || variable.equals("PE") || 
-               variable.equals("E");
+               variable.equals("E") || variable.equals("E_k") || variable.equals("U") ||
+               variable.equals("ΔU") || variable.equals("ΔQ");
     }
 
     private boolean isVelocityVariable(String variable) {
-        return variable.equals("v") || variable.equals("u") || variable.equals("dv");
+        return variable.equals("v") || variable.equals("u") || variable.equals("dv") ||
+               variable.equals("vo") || variable.equals("vs");
     }
 
     private boolean isPowerVariable(String variable) {
@@ -635,15 +1047,19 @@ public class InputOutputPanel extends JPanel {
     }
 
     private boolean isPressureVariable(String variable) {
-        return variable.equals("P");
+        return variable.equals("P") || variable.equals("P0") || variable.equals("P1") ||
+               variable.equals("P2") || variable.equals("P3") || variable.equals("P_total");
     }
 
     private boolean isAngleVariable(String variable) {
-        return variable.equals("θ");
+        return variable.equals("θ") || variable.equals("i") || variable.equals("r") || 
+               variable.equals("C") || variable.equals("α") || variable.equals("ω") ||
+               variable.equals("ω₀");
     }
 
     private boolean isTemperatureVariable(String variable) {
-        return variable.equals("K") || variable.equals("°C") || variable.equals("°F");
+        return variable.equals("T") || variable.equals("T1") || variable.equals("T2") ||
+               variable.equals("Tc") || variable.equals("Th");
     }
 
     private boolean isCurrentVariable(String variable) {
@@ -651,15 +1067,42 @@ public class InputOutputPanel extends JPanel {
     }
 
     private boolean isVoltageVariable(String variable) {
-        return variable.equals("V");
+        return variable.equals("V") || variable.equals("ε");
     }
 
     private boolean isResistanceVariable(String variable) {
-        return variable.equals("R");
+        return variable.equals("R") || variable.equals("R1") || variable.equals("R2") ||
+               variable.equals("R3") || variable.equals("Rs") || variable.equals("Rp");
     }
 
     private boolean isChargeVariable(String variable) {
-        return variable.equals("q1") || variable.equals("q2") || variable.equals("q");
+        return variable.equals("q1") || variable.equals("q2") || variable.equals("q") ||
+               variable.equals("Q");
+    }
+
+    private boolean isFrequencyVariable(String variable) {
+        return variable.equals("f") || variable.equals("f'");
+    }
+
+    private boolean isSpringConstantVariable(String variable) {
+        return variable.equals("k");
+    }
+
+    private boolean isRefractiveIndexVariable(String variable) {
+        return variable.equals("n1") || variable.equals("n2");
+    }
+
+    private boolean isHeatVariable(String variable) {
+        return variable.equals("ΔQ") || variable.equals("Qc") || variable.equals("Qh") || 
+               variable.equals("ΔU") || variable.equals("W");
+    }
+
+    private boolean isEntropyVariable(String variable) {
+        return variable.equals("ΔS");
+    }
+
+    private boolean isEfficiencyVariable(String variable) {
+        return variable.equals("η");
     }
 
     // Enhanced conversion methods
@@ -702,7 +1145,7 @@ public class InputOutputPanel extends JPanel {
                 case "kgf": return value * 9.80665;
                 default: return value; // N
             }
-        } else if (isEnergyVariable(variable)) {
+        } else if (isEnergyVariable(variable) || isHeatVariable(variable)) {
             switch (unit) {
                 case "kJ": return value * 1000;
                 case "cal": return value * 4.184;
@@ -766,9 +1209,24 @@ public class InputOutputPanel extends JPanel {
                 case "μC": return value / 1e6;
                 default: return value; // C
             }
+        } else if (isFrequencyVariable(variable)) {
+            switch (unit) {
+                case "kHz": return value * 1000;
+                case "MHz": return value * 1e6;
+                case "GHz": return value * 1e9;
+                default: return value; // Hz
+            }
+        } else if (isSpringConstantVariable(variable)) {
+            switch (unit) {
+                case "N/cm": return value * 100;
+                case "N/mm": return value * 1000;
+                default: return value; // N/m
+            }
         } else if (isTemperatureVariable(variable)) {
             // Temperature conversions are handled separately in performCalculation
             return value;
+        } else if (isEntropyVariable(variable)) {
+            return value; // No conversion needed for basic units
         }
         return value; // No conversion needed
     }
@@ -812,7 +1270,7 @@ public class InputOutputPanel extends JPanel {
                 case "kgf": return value / 9.80665;
                 default: return value; // N
             }
-        } else if (isEnergyVariable(variable)) {
+        } else if (isEnergyVariable(variable) || isHeatVariable(variable)) {
             switch (unit) {
                 case "kJ": return value / 1000;
                 case "cal": return value / 4.184;
@@ -876,6 +1334,19 @@ public class InputOutputPanel extends JPanel {
                 case "μC": return value * 1e6;
                 default: return value; // C
             }
+        } else if (isFrequencyVariable(variable)) {
+            switch (unit) {
+                case "kHz": return value / 1000;
+                case "MHz": return value / 1e6;
+                case "GHz": return value / 1e9;
+                default: return value; // Hz
+            }
+        } else if (isSpringConstantVariable(variable)) {
+            switch (unit) {
+                case "N/cm": return value / 100;
+                case "N/mm": return value / 1000;
+                default: return value; // N/m
+            }
         }
         return value; // No conversion needed
     }
@@ -889,7 +1360,7 @@ public class InputOutputPanel extends JPanel {
             return new String[]{"s", "ms", "min", "h", "day"};
         } else if (isForceVariable(variable)) {
             return new String[]{"N", "dyne", "lbf"};
-        } else if (isEnergyVariable(variable)) {
+        } else if (isEnergyVariable(variable) || isHeatVariable(variable)) {
             return new String[]{"J", "erg", "cal", "eV"};
         } else if (isVelocityVariable(variable)) {
             return new String[]{"m/s", "km/h", "mph", "ft/s"};
@@ -903,6 +1374,18 @@ public class InputOutputPanel extends JPanel {
             return new String[]{"Ω", "kΩ", "MΩ"};
         } else if (isChargeVariable(variable)) {
             return new String[]{"C", "mC", "μC"};
+        } else if (isFrequencyVariable(variable)) {
+            return new String[]{"Hz", "kHz", "MHz"};
+        } else if (isSpringConstantVariable(variable)) {
+            return new String[]{"N/m", "N/cm", "N/mm"};
+        } else if (isRefractiveIndexVariable(variable)) {
+            return new String[]{"—"};
+        } else if (isHeatVariable(variable)) {
+            return new String[]{"J", "kJ", "cal", "kcal", "eV", "BTU"};
+        } else if (isEntropyVariable(variable)) {
+            return new String[]{"J/K"};
+        } else if (isEfficiencyVariable(variable)) {
+            return new String[]{"—"};
         }
         return new String[]{getUnitForVariable(variable)};
     }
@@ -949,16 +1432,70 @@ public class InputOutputPanel extends JPanel {
         formulaMap.put("Collision", "m₁u₁ + m₂u₂ = m₁v₁ + m₂v₂");
         formulaMap.put("Gravitational Force", "F = G × m₁ × m₂ / r²");
         formulaMap.put("Acceleration due to Gravity", "g = G × M / r²");
+        formulaMap.put("Gravitational Potential Energy", "U = - (G × M × m) / r");
+        formulaMap.put("Orbital Velocity", "v = √(G × M / r)");
+        formulaMap.put("Kepler's Laws", "T² = (4π²/GM) × r³");
+        formulaMap.put("Distance-Time Relation", "s = u × t + ½ × a × t²");
+        formulaMap.put("Velocity-Time Relation", "v = u + a × t");
+        formulaMap.put("Moment of Inertia", "I = m × r²");
         formulaMap.put("Pressure", "P = F / A");
         formulaMap.put("Density", "ρ = m / V");
+        formulaMap.put("Bernoulli's Principle", "P + (1/2) × ρ × v² + ρ × g × h = constant");
+        formulaMap.put("Elasticity", "Y = (F / A) / (ΔL / L)");
+        formulaMap.put("Pressure in Gases", "P = (1/3) × ρ × v²");
+        formulaMap.put("Fluid Pressure (Hydrostatic Pressure)", "P = ρ × g × h");
+        formulaMap.put("Atmospheric Pressure", "P = h × ρ × g");
+        formulaMap.put("Pascal's Law", "F₁ / A₁ = F₂ / A₂");
+        formulaMap.put("Pressure due to Depth in Fluid", "P = P₀ + ρ × g × h");
+        formulaMap.put("Boyle's Law", "P₁ × V₁ = P₂ × V₂");
+        formulaMap.put("Charles's Law", "V₁ / T₁ = V₂ / T₂");
+        formulaMap.put("Avogadro's Law", "V₁ / n₁ = V₂ / n₂");
+        formulaMap.put("Combined Gas Law", "(P₁ × V₁) / T₁ = (P₂ × V₂) / T₂");
+        formulaMap.put("Ideal Gas Law", "P × V = n × R × T");
+        formulaMap.put("Dalton's Law of Partial Pressure", "P_total = P₁ + P₂ + P₃ + ...");
         formulaMap.put("Temperature Conversion", "K = °C + 273.15 | °F = °C × 9/5 + 32");
+        formulaMap.put("First Law of Thermodynamics", "ΔQ = ΔU + W");
+        formulaMap.put("Heat Engine Efficiency", "η = 1 - (Qc / Qh)");
+        formulaMap.put("Carnot Efficiency", "η = 1 - (Tc / Th)");
+        formulaMap.put("Entropy", "ΔS = ΔQ / T");
         formulaMap.put("Wave Speed", "v = f × λ");
+        formulaMap.put("Period", "T = 1 / f");
+        formulaMap.put("Hooke's Law (Spring)", "F = -k × x");
+        formulaMap.put("Energy in Simple Harmonic Oscillator", "E = (1/2) × k × A²");
+        formulaMap.put("Resonance Frequency", "f = (1 / 2π) × √(k / m)");
+        formulaMap.put("Doppler Effect", "f' = f × (v ± vo) / (v ∓ vs)");
+        formulaMap.put("Sound Intensity", "I = P / A");
+        formulaMap.put("Decibel Formula", "β = 10 × log₁₀(I / I₀)");
         formulaMap.put("Lens Formula", "1/f = 1/v - 1/u");
+        formulaMap.put("Mirror Formula", "1/f = 1/u + 1/v");
+        formulaMap.put("Magnification", "m = h'/h = -v/u");
+        formulaMap.put("Snell's Law", "n1 * sin(i) = n2 * sin(r)");
+        formulaMap.put("Critical Angle", "sin(C) = n2 / n1");
+        formulaMap.put("Total Internal Reflection", "n1 * sin(i) = n2 * sin(r)");
         formulaMap.put("Ohm's Law", "V = I × R");
+        formulaMap.put("Electric Potential", "V = k × Q / r");
+        formulaMap.put("Electric Field", "E = F / q = k × Q / r²");
+        formulaMap.put("Coulomb's Law", "F = k × (q₁ × q₂) / r²");
+        formulaMap.put("Electric Power", "P = V × I = I² × R = V² / R");
+        formulaMap.put("Series Resistance", "R_s = R₁ + R₂ + R₃ + ...");
+        formulaMap.put("Parallel Resistance", "1/R_p = 1/R₁ + 1/R₂ + 1/R₃ + ...");
+        formulaMap.put("Magnetic Field (Due to a Straight Wire)", "B = (μ₀ × I) / (2 × π × r)");
+        formulaMap.put("Charge", "Q = I × t");
+        formulaMap.put("Inductance", "V = L × (dI/dt)");
+        formulaMap.put("Conductivity", "σ = 1 / ρ");
+        formulaMap.put("Faraday's Law of Electromagnetic Induction", "ε = -dΦ/dt");
         formulaMap.put("Electric Power", "P = V × I");
-        formulaMap.put("Coulomb's Law", "F = k × q₁ × q₂ / r²");
+        
         formulaMap.put("Mass-Energy Equivalence", "E = m × c²");
         formulaMap.put("Photon Energy", "E = h × f");
+        formulaMap.put("de Broglie Wavelength", "λ = h / p");
+        formulaMap.put("Photoelectric Effect (Einstein's Equation)", "E_k = h × f - φ");
+        formulaMap.put("Nuclear Fission", "Heavy nucleus → lighter nuclei + energy (E = Δm × c²)");
+        formulaMap.put("Nuclear Fusion", "Light nuclei → heavier nucleus + energy (E = Δm × c²)");
+        formulaMap.put("Half-Life Formula", "T₁/₂ = 0.693 / λ");
+        formulaMap.put("Radioactive Decay Law", "N = N₀ × e^(-λt)");
+        formulaMap.put("Electromagnetic Wave", "c = λ × f");
+
         formulaMap.put("Displacement Vector", "|d| = √((x₂-x₁)² + (y₂-y₁)²)");
         
         return formulaMap.getOrDefault(formula, formula);
@@ -1000,28 +1537,80 @@ public class InputOutputPanel extends JPanel {
         // Gravitation
         variables.put("Gravitational Force", new String[]{"F", "m1", "m2", "r"});
         variables.put("Acceleration due to Gravity", new String[]{"g", "M", "r"});
+        variables.put("Gravitational Potential Energy", new String[]{"U", "M", "m", "r"});
+        variables.put("Orbital Velocity", new String[]{"v", "M", "r"});
+        variables.put("Kepler's Laws", new String[]{"T", "r", "M"});
+        variables.put("Distance-Time Relation", new String[]{"s", "u", "t", "a"});
+        variables.put("Velocity-Time Relation", new String[]{"v", "u", "a", "t"});
+        variables.put("Moment of Inertia", new String[]{"I", "m", "r"});
         
         // Fluid Mechanics
         variables.put("Pressure", new String[]{"P", "F", "A"});
         variables.put("Density", new String[]{"ρ", "m", "V"});
+        variables.put("Bernoulli's Principle", new String[]{"P", "ρ", "v", "h", "constant"});
+        variables.put("Elasticity", new String[]{"Y", "F", "A", "ΔL", "L"});
+        variables.put("Pressure in Gases", new String[]{"P", "ρ", "v"});
+        variables.put("Fluid Pressure (Hydrostatic Pressure)", new String[]{"P", "ρ", "h"});
+        variables.put("Atmospheric Pressure", new String[]{"P", "h", "ρ"});
+        variables.put("Pascal's Law", new String[]{"F1", "F2", "A1", "A2"});
+        variables.put("Pressure due to Depth in Fluid", new String[]{"P", "P0", "ρ", "h"});
+        variables.put("Boyle's Law", new String[]{"P1", "P2", "V1", "V2"});
+        variables.put("Charles's Law", new String[]{"V1", "V2", "T1", "T2"});
+        variables.put("Gay-Lussac's Law", new String[]{"P1", "P2", "T1", "T2"});
+        variables.put("Avogadro's Law", new String[]{"V1", "V2", "n1", "n2"});
+        variables.put("Combined Gas Law", new String[]{"P1", "V1", "T1", "P2", "V2", "T2"});
+        variables.put("Ideal Gas Law", new String[]{"P", "V", "n", "T"});
+        variables.put("Dalton's Law of Partial Pressure", new String[]{"P_total", "P1", "P2", "P3"});
         
         // Thermodynamics
         variables.put("Temperature Conversion", new String[]{"K", "°C", "°F"});
+        variables.put("First Law of Thermodynamics", new String[]{"ΔQ", "ΔU", "W"});
+        variables.put("Heat Engine Efficiency", new String[]{"η", "Qc", "Qh"});
+        variables.put("Carnot Efficiency", new String[]{"η", "Tc", "Th"});
+        variables.put("Entropy", new String[]{"ΔS", "ΔQ", "T"});
         
         // Waves and Oscillations
         variables.put("Wave Speed", new String[]{"v", "f", "λ"});
+        variables.put("Period", new String[]{"T", "f"});
+        variables.put("Hooke's Law (Spring)", new String[]{"F", "k", "x"});
+        variables.put("Energy in Simple Harmonic Oscillator", new String[]{"E", "k", "A"});
+        variables.put("Resonance Frequency", new String[]{"f", "k", "m"});
+        variables.put("Doppler Effect", new String[]{"f'", "f", "v", "vo", "vs"});
+        variables.put("Sound Intensity", new String[]{"I", "P", "A"});
+        variables.put("Decibel Formula", new String[]{"β", "I"});
         
         // Optics
         variables.put("Lens Formula", new String[]{"f", "u", "v"});
+        variables.put("Mirror Formula", new String[]{"f", "u", "v"});
+        variables.put("Magnification", new String[]{"m", "h", "h_prime", "u", "v"});
+        variables.put("Snell's Law", new String[]{"n1", "n2", "i", "r"});
+        variables.put("Critical Angle", new String[]{"C", "n1", "n2"});
+        variables.put("Total Internal Reflection", new String[]{"n1", "n2", "i", "r"});
         
         // Electricity and Magnetism
-        variables.put("Ohm's Law", new String[]{"V", "I", "R"});
-        variables.put("Electric Power", new String[]{"P", "V", "I"});
+        variables.put("Electric Potential", new String[]{"V", "Q", "r"});
+        variables.put("Electric Field", new String[]{"E", "F", "q", "Q", "r"});
         variables.put("Coulomb's Law", new String[]{"F", "q1", "q2", "r"});
+        variables.put("Ohm's Law", new String[]{"V", "I", "R"});
+        variables.put("Electric Power", new String[]{"P", "V", "I", "R"});
+        variables.put("Series Resistance", new String[]{"Rs", "R1", "R2", "R3"});
+        variables.put("Parallel Resistance", new String[]{"Rp", "R1", "R2", "R3"});
+        variables.put("Magnetic Field (Due to a Straight Wire)", new String[]{"B", "I", "r"});
+        variables.put("Charge", new String[]{"Q", "I", "t"});
+        variables.put("Inductance", new String[]{"V", "L", "dI_dt"});
+        variables.put("Conductivity", new String[]{"σ", "ρ"});
+        variables.put("Faraday's Law of Electromagnetic Induction", new String[]{"ε", "dΦ_dt"});
         
         // Modern Physics
         variables.put("Mass-Energy Equivalence", new String[]{"E", "m"});
-        variables.put("Photon Energy", new String[]{"E", "f"});
+        variables.put("Photon Energy", new String[]{"E", "f", "h"});
+        variables.put("de Broglie Wavelength", new String[]{"λ", "p", "h"});
+        variables.put("Photoelectric Effect (Einstein's Equation)", new String[]{"E_k", "f", "φ", "h"});
+        variables.put("Nuclear Fission", new String[]{"E", "m_initial", "m_final"});
+        variables.put("Nuclear Fusion", new String[]{"E", "m_initial", "m_final"});
+        variables.put("Half-Life Formula", new String[]{"T1/2", "λ"});
+        variables.put("Radioactive Decay Law", new String[]{"N", "N0", "λ", "t"});
+        variables.put("Electromagnetic Wave", new String[]{"c", "λ", "f"});
         
         // Vector
         variables.put("Displacement Vector", new String[]{"x1", "y1", "x2", "y2"});
@@ -1052,7 +1641,7 @@ public class InputOutputPanel extends JPanel {
         units.put("Fc", "N");
         units.put("J", "N·s");
         units.put("τ", "N·m");
-        units.put("θ", "rad");
+        units.put("θ", "°");
         units.put("ω", "rad/s");
         units.put("ω₀", "rad/s");
         units.put("α", "rad/s²");
@@ -1103,6 +1692,58 @@ public class InputOutputPanel extends JPanel {
         units.put("y1", "m");
         units.put("x2", "m");
         units.put("y2", "m");
+        units.put("U", "J");        // Gravitational Potential Energy (Joule)
+        units.put("M", "kg");       // Central mass (kilogram)
+        units.put("m", "kg");       // Orbiting mass (kilogram)  
+        units.put("r", "m");        // Distance/Radius (meter)
+        units.put("v", "m/s");      // Orbital velocity (meter/second)
+        units.put("T", "s");        // Orbital period (second)
+        units.put("s", "m");        // Distance (meter)
+        units.put("u", "m/s");      // Initial velocity (meter/second)
+        units.put("a", "m/s²");     // Acceleration (meter/second²)
+        units.put("I", "kg·m²");    // Moment of Inertia (kilogram meter squared)
+        units.put("P", "Pa");           // Pressure (Pascal) 
+        units.put("F", "N");            // Force (Newton)
+        units.put("A", "m²");           // Area (square meter)
+        units.put("ρ", "kg/m³");        // Density (kg per cubic meter)
+        units.put("V", "m³");           // Volume (cubic meter)
+        units.put("v", "m/s");          // Velocity (meter/second)
+        units.put("h", "m");            // Height (meter)
+        units.put("g", "m/s²");         // Gravity (meter/second²)
+        units.put("Y", "Pa");           // Young's Modulus (Pascal)
+        units.put("ΔL", "m");           // Change in length (meter)
+        units.put("L", "m");            // Original length (meter)
+        units.put("P0", "Pa");          // Initial pressure (Pascal)
+        units.put("T", "K");            // Temperature (Kelvin)
+        units.put("n", "mol");          // Number of moles (mole)
+        units.put("R", "J/(mol·K)");    // Gas constant
+        units.put("P_total", "Pa");     // Total pressure (Pascal)
+        units.put("P1", "Pa");          // Partial pressure 1
+        units.put("P2", "Pa");          // Partial pressure 2
+        units.put("P3", "Pa");          // Partial pressure 3
+        units.put("constant", "J/m³");  // Bernoulli constant (Energy per volume)
+        units.put("k", "N/m");          // Spring constant
+        units.put("x", "m");            // Displacement
+        units.put("A", "m");            // Amplitude
+        units.put("f", "Hz");           // Frequency
+        units.put("f'", "Hz");          // Observed frequency
+        units.put("vo", "m/s");         // Observer velocity
+        units.put("vs", "m/s");         // Source velocity
+        units.put("β", "dB");           // Decibels
+        units.put("n1", "—");           // Refractive index 1
+        units.put("n2", "—");           // Refractive index 2
+        units.put("i", "°");            // Incident angle
+        units.put("r", "°");            // Refracted angle
+        units.put("C", "°");            // Critical angle
+        units.put("ΔQ", "J");           // Heat transfer
+        units.put("ΔU", "J");           // Internal energy change
+        units.put("W", "J");            // Work
+        units.put("η", "—");            // Efficiency (dimensionless)
+        units.put("Qc", "J");           // Cold reservoir heat
+        units.put("Qh", "J");           // Hot reservoir heat
+        units.put("Tc", "K");           // Cold temperature
+        units.put("Th", "K");           // Hot temperature
+        units.put("ΔS", "J/K");         // Entropy change
         
         return units.getOrDefault(variable, "");
     }
@@ -1119,6 +1760,26 @@ public class InputOutputPanel extends JPanel {
                 } else if (calculatedVariable.equals("m1")) {
                     sb.append(String.format("m₁ = (%.6f × %.2f²) / (6.67430×10⁻¹¹ × %.2f) = %.6f kg", 
                         inputValues.get("F"), inputValues.get("r"), inputValues.get("m2"), result));
+                }
+                break;
+                
+            case "Kepler's Laws":
+                if (calculatedVariable.equals("T")) {
+                    sb.append(String.format("T = 2π × √(%.2f³ / (6.67430×10⁻¹¹ × %.2f)) = %.6f s", 
+                        inputValues.get("r"), inputValues.get("M"), result));
+                } else if (calculatedVariable.equals("r")) {
+                    sb.append(String.format("r = ∛((%.2f² × 6.67430×10⁻¹¹ × %.2f) / (4π²)) = %.6f m", 
+                        inputValues.get("T"), inputValues.get("M"), result));
+                }
+                break;
+                
+            case "Snell's Law":
+                if (calculatedVariable.equals("n1")) {
+                    sb.append(String.format("n₁ = %.2f × sin(%.2f°) / sin(%.2f°) = %.6f", 
+                        inputValues.get("n2"), inputValues.get("r"), inputValues.get("i"), result));
+                } else if (calculatedVariable.equals("n2")) {
+                    sb.append(String.format("n₂ = %.2f × sin(%.2f°) / sin(%.2f°) = %.6f", 
+                        inputValues.get("n1"), inputValues.get("i"), inputValues.get("r"), result));
                 }
                 break;
                 
