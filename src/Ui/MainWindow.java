@@ -31,6 +31,11 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
+
+
+
+
+
     private void initializePanels() {
         welcomePanel = new WelcomePanel(this);
         mainPanel.add(welcomePanel, "WelcomePanel");
