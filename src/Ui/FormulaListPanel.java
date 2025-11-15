@@ -12,7 +12,7 @@ public class FormulaListPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // ========== ALL FORMULAS ==========
+
 
         formulas.put("Mechanics", new String[]{
             "Velocity", "Acceleration", "Force", "Work", "Power", 
@@ -27,42 +27,46 @@ public class FormulaListPanel extends JPanel {
         formulas.put("Gravitation", new String[]{
             "Gravitational Force", "Acceleration due to Gravity",
             "Gravitational Potential Energy", 
-            "Orbital Velocity", "Kepler’s Laws (Orbital Period, Radius relation)", "Distance-Time Relation", 
-            "Velocity-Time Relation", "Moment of Inertia", 
+            "Orbital Velocity", "Kepler's Laws", "Distance-Time Relation", 
+            "Velocity-Time Relation", "Moment of Inertia"
         });
 
         formulas.put("Fluid Mechanics", new String[]{
-            "Pressure", "Density","Bernoulli’s Principle","Ellustisity", "Pressure in gases", 
-            "Fluid Pressure (Hydrostatic Pressure)", "Atmospheric Pressure", "Pascal’s Law", 
-            "Pressure due to Depth in Fluid", "Boyle’s Law", "Charles’s Law", "Gay-Lussac’s Law", "Avogadro’s Law", "Combined Gas Law", "Ideal Gas Law", "Dalton’s Law of Partial Pressure", 
+            "Pressure", "Density","Bernoulli's Principle","Elasticity", "Pressure in Gases", 
+            "Fluid Pressure (Hydrostatic Pressure)", "Atmospheric Pressure", "Pascal's Law", 
+            "Pressure due to Depth in Fluid", "Boyle's Law", "Charles's Law", "Gay-Lussac's Law", 
+            "Avogadro's Law", "Combined Gas Law", "Ideal Gas Law", "Dalton's Law of Partial Pressure"
         });
 
         formulas.put("Thermodynamics", new String[]{
-            "Temperature Conversion","First Law of Thermodynamic", "Efficiency of Heat Engine", "Carnot Efficiency", "Entropy",
+            "Temperature Conversion","First Law of Thermodynamics", "Heat Engine Efficiency", 
+            "Carnot Efficiency", "Entropy"
         });
 
         formulas.put("Waves and Oscillations", new String[]{
-            "Wave Speed","Period", "Hooke’s Law (Spring)", "Energy in Simple Harmonic Oscillator", "Resonance Frequency", 
-            "Doppler Effect", "Sound Intensity", "Decibel Formula",
+            "Wave Speed","Period", "Hooke's Law (Spring)", "Energy in Simple Harmonic Oscillator", 
+            "Resonance Frequency", "Doppler Effect", "Sound Intensity", "Decibel Formula"
         });
 
         formulas.put("Optics", new String[]{
-            "Lens Formula","Mirror Formula","Magnification", "Snell’s Law", 
-             "Critical Angle", "Total Internal Reflection",
+            "Lens Formula","Mirror Formula","Magnification", "Snell's Law", 
+            "Critical Angle", "Total Internal Reflection"
         });
 
         formulas.put("Electricity and Magnetism", new String[]{
-            "Ohm's Law", "Electric Power", "Coulomb's Law","Electric Potential","Electric Field","Series Resistance", 
-            "Parallel Resistance", "Magnetic Field", "Charge", "Inductance", "Conductivity", "Faraday’s Law", 
+            "Ohm's Law", "Electric Power", "Coulomb's Law","Electric Potential","Electric Field",
+            "Series Resistance", "Parallel Resistance", "Magnetic Field (Due to a Straight Wire)", 
+            "Charge", "Inductance", "Conductivity", "Faraday's Law of Electromagnetic Induction"
         });
 
         formulas.put("Modern Physics", new String[]{
             "Mass-Energy Equivalence", "Photon Energy","de Broglie Wavelength", 
-            "Photoelectric", "Nuclear fission", "Nuclear fusion", "Half-Life Formula", "Radioactive Decay Law", "Electro Magnetic Wave",
+            "Photoelectric Effect (Einstein's Equation)", "Nuclear Fission", "Nuclear Fusion", 
+            "Half-Life Formula", "Radioactive Decay Law", "Electromagnetic Wave"
         });
 
         formulas.put("Vector", new String[]{
-            "Displacement Vector","Velocity Vector", "Acceleration Vector", "Divergence", "Carl", "Gradient"
+            "Displacement Vector"
         });
 
         // ========== UI ==========
