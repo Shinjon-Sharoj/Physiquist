@@ -80,3 +80,5 @@ public class WelcomePanel extends JPanel {
         g2.drawString(title, x, y+28);
     }
 }
+
+
