@@ -1,3 +1,28 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package Ui;
 
 import java.awt.*;
@@ -1927,4 +1952,4 @@ public class InputOutputPanel extends JPanel {
        
         return sb.toString();
     }
-} 
+}

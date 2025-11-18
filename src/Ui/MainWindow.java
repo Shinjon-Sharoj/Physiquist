@@ -1,4 +1,4 @@
-package Ui;
+/*package Ui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -143,5 +143,71 @@ public class MainWindow extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new MainWindow();
         });
+    }
+}*/
+
+
+
+package Ui;
+
+import java.awt.*;
+import javax.swing.*;
+
+public class MainWindow extends JFrame {
+
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel mainPanel = new JPanel(cardLayout);
+
+    private final WelcomePanel welcomePanel;
+    private final CategoryPanel categoryPanel;
+    private FormulaListPanel currentFormulaListPanel;
+    private InputOutputPanel currentInputOutputPanel;
+
+    public MainWindow() {
+        setTitle("PHYSIQUIST - Physics Made Easy");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1200, 800);
+        setMinimumSize(new Dimension(1000, 650));
+        setLocationRelativeTo(null);
+
+        mainPanel.setBackground(new Color(248, 252, 255));
+
+        welcomePanel = new WelcomePanel(this);
+        categoryPanel = new CategoryPanel(this);
+
+        mainPanel.add(welcomePanel, "Welcome");
+        mainPanel.add(categoryPanel, "Category");
+
+        add(mainPanel);
+        cardLayout.show(mainPanel, "Welcome");
+        setVisible(true);
+    }
+
+    public void showCategoryPanel() { cleanup(); cardLayout.show(mainPanel, "Category"); }
+    public void showFormulaList(String category) {
+        cleanup();
+        currentFormulaListPanel = new FormulaListPanel(this, category);
+        mainPanel.add(currentFormulaListPanel, "FormulaList");
+        cardLayout.show(mainPanel, "FormulaList");
+    }
+    public void showInputOutputPanel(String formula) {
+        cleanup();
+        currentInputOutputPanel = new InputOutputPanel(this, formula);
+        mainPanel.add(currentInputOutputPanel, "InputOutput");
+        cardLayout.show(mainPanel, "InputOutput");
+    }
+    public void backToFormulaList() {
+        if (currentInputOutputPanel != null) {
+            mainPanel.remove(currentInputOutputPanel);
+            currentInputOutputPanel = null;
+        }
+        if (currentFormulaListPanel != null) cardLayout.show(mainPanel, "FormulaList");
+        else showCategoryPanel();
+    }
+    public void backToCategoryPanel() { cleanup(); cardLayout.show(mainPanel, "Category"); }
+
+    private void cleanup() {
+        if (currentFormulaListPanel != null) { mainPanel.remove(currentFormulaListPanel); currentFormulaListPanel = null; }
+        if (currentInputOutputPanel != null) { mainPanel.remove(currentInputOutputPanel); currentInputOutputPanel = null; }
     }
 }
