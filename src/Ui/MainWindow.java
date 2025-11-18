@@ -1,4 +1,4 @@
-/*package Ui;
+package Ui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -144,11 +144,11 @@ public class MainWindow extends JFrame {
             new MainWindow();
         });
     }
-}*/
+}
 
 
 
-package Ui;
+/*package Ui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -210,4 +210,4 @@ public class MainWindow extends JFrame {
         if (currentFormulaListPanel != null) { mainPanel.remove(currentFormulaListPanel); currentFormulaListPanel = null; }
         if (currentInputOutputPanel != null) { mainPanel.remove(currentInputOutputPanel); currentInputOutputPanel = null; }
     }
-}
+}*/

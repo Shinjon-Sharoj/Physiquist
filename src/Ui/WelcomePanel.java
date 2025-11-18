@@ -1,4 +1,4 @@
-/*package Ui;
+package Ui;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -81,9 +81,7 @@ public class WelcomePanel extends JPanel {
     }
 }
 
-
-*/
-package Ui;
+/*package Ui;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -290,4 +288,4 @@ public class WelcomePanel extends JPanel {
 
         g2.dispose();
     }
-}
+}*/

@@ -1,4 +1,4 @@
-/*package Ui;
+package Ui;
 
 import java.awt.*;
 import java.util.*;
@@ -162,10 +162,10 @@ public class FormulaListPanel extends JPanel {
         }
         return false;
     }
-}*/
+}
 
 
-package Ui;
+/*package Ui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -497,7 +497,7 @@ public class FormulaListPanel extends JPanel {
         g.dispose();
         return new ImageIcon(img);
     }
-}
+}*/
 
 
 
