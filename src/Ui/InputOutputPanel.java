@@ -1442,7 +1442,7 @@ public class InputOutputPanel extends JPanel {
                 default: return value; // N/m
             }
         }
-        return value; // No conversion needed
+        return value; 
     }
 
     private String[] getAvailableUnitsForVariable(String variable) {
